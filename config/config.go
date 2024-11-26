@@ -58,6 +58,7 @@ var (
 
 func ConfigGetting() *Config {
 	once.Do(func() {
+		viper.AddConfigPath("./config")
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath("./")
