@@ -1,3 +1,7 @@
 package repository
 
-type ItemShopRepository interface{}
+import "github.com/bigstth/isekai-shop-api/entities"
+
+type ItemShopRepository interface {
+	Listing() ([]*entities.Item, error)
+}
