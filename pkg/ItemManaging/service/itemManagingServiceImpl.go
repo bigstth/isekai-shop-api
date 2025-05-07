@@ -1,7 +1,7 @@
 package service
 
 import (
-	_itemManagingRepository "github.com/bigstth/isekai-shop-api/pkg/ItemManaging/repository"
+	_itemManagingRepository "github.com/bigstth/isekai-shop-api/pkg/itemManaging/repository"
 )
 
 type ItemManagingServiceImpl struct {
