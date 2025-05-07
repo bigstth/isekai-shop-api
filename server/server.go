@@ -56,6 +56,7 @@ func (s *echoServer) Start() {
 
 	s.app.GET("/V1/health", s.healthCheck)
 	s.initItemShopRouter()
+	s.initItemManagingRouter()
 
 	quitCh := make(chan os.Signal, 1)
 	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)
