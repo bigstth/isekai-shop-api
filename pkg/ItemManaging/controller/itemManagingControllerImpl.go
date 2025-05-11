@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/bigstth/isekai-shop-api/pkg/custom"
 	_itemManagingModel "github.com/bigstth/isekai-shop-api/pkg/itemManaging/model"
@@ -33,4 +34,36 @@ func (c *ItemManagingControllerImpl) Creating(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusCreated, item)
+}
+
+func (c *ItemManagingControllerImpl) Editing(ctx echo.Context) error {
+	itemId, err := c.getItemID(ctx)
+	if err != nil {
+		return custom.Error(ctx, http.StatusBadRequest, "Invalid item ID")
+	}
+
+	itemEditingRequest := new(_itemManagingModel.ItemEditingReq)
+
+	customEchoRequest := custom.NewCustomEchoRequest(ctx)
+
+	if err := customEchoRequest.Bind(itemEditingRequest); err != nil {
+		return custom.Error(ctx, http.StatusBadRequest, err.Error())
+	}
+
+	item, err := c.itemManagingService.Editing(itemId, itemEditingRequest)
+
+	if err != nil {
+		return custom.Error(ctx, http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(http.StatusOK, item)
+}
+
+func (c *ItemManagingControllerImpl) getItemID(ctx echo.Context) (uint64, error) {
+	itemID := ctx.Param("itemID")
+	itemIDUint64, err := strconv.ParseUint(itemID, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	return itemIDUint64, nil
 }

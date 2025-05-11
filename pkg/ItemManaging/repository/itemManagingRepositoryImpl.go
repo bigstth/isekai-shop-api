@@ -4,6 +4,7 @@ import (
 	"github.com/bigstth/isekai-shop-api/entities"
 	"github.com/bigstth/isekai-shop-api/pkg/custom"
 	_itemCreatingException "github.com/bigstth/isekai-shop-api/pkg/itemManaging/exceptions"
+	_itemManagingModel "github.com/bigstth/isekai-shop-api/pkg/itemManaging/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -32,4 +33,12 @@ func (r *itemManagingRepositoryImpl) Creating(itemEntity *entities.Item) (*entit
 	}
 
 	return item, nil
+}
+func (r *itemManagingRepositoryImpl) Editing(itemId uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error) {
+	if err := r.db.Model(&entities.Item{}).Where("id = ?", itemId).Updates(itemEditingReq).Error; err != nil {
+		r.logger.Error("Failed to create item:", err)
+		return 0, &_itemCreatingException.ItemEditingException{}
+	}
+
+	return itemId, nil
 }
