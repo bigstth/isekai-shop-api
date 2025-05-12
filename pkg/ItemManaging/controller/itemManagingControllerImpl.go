@@ -67,3 +67,18 @@ func (c *ItemManagingControllerImpl) getItemID(ctx echo.Context) (uint64, error)
 	}
 	return itemIDUint64, nil
 }
+
+func (c *ItemManagingControllerImpl) Archiving(ctx echo.Context) error {
+	itemId, err := c.getItemID(ctx)
+	if err != nil {
+		return custom.Error(ctx, http.StatusBadRequest, "Invalid item ID")
+	}
+
+	err = c.itemManagingService.Archiving(itemId)
+
+	if err != nil {
+		return custom.Error(ctx, http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.NoContent(http.StatusNoContent)
+}

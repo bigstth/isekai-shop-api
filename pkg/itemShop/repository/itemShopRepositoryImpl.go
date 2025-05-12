@@ -1,20 +1,20 @@
 package repository
 
 import (
+	"github.com/bigstth/isekai-shop-api/databases"
 	"github.com/bigstth/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 
 	_itemShopExceptions "github.com/bigstth/isekai-shop-api/pkg/itemShop/exceptions"
 	"github.com/bigstth/isekai-shop-api/pkg/itemShop/model"
 )
 
 type itemShopRepositoryImpl struct {
-	db     *gorm.DB
+	db     databases.Database
 	logger echo.Logger
 }
 
-func NewItemShopRepositoryImpl(db *gorm.DB, logger echo.Logger) ItemShopRepository {
+func NewItemShopRepositoryImpl(db databases.Database, logger echo.Logger) ItemShopRepository {
 
 	return &itemShopRepositoryImpl{db, logger}
 }
@@ -23,7 +23,7 @@ func (r *itemShopRepositoryImpl) Listing(itemFilter *model.ItemFilter) ([]*entit
 	itemList := make([]*entities.Item, 0)
 
 	//pagination is (page-1)* size
-	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.Connect().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilter.Name+"%")
@@ -46,7 +46,7 @@ func (r *itemShopRepositoryImpl) Listing(itemFilter *model.ItemFilter) ([]*entit
 func (r *itemShopRepositoryImpl) Counting(itemFilter *model.ItemFilter) (int64, error) {
 
 	//pagination is (page-1)* size
-	query := r.db.Model(&entities.Item{}).Where("is_archive = ?", false)
+	query := r.db.Connect().Model(&entities.Item{}).Where("is_archive = ?", false)
 
 	if itemFilter.Name != "" {
 		query = query.Where("name LIKE ?", "%"+itemFilter.Name+"%")
@@ -68,7 +68,7 @@ func (r *itemShopRepositoryImpl) Counting(itemFilter *model.ItemFilter) (int64, 
 func (r *itemShopRepositoryImpl) FindByID(itemID uint64) (*entities.Item, error) {
 	item := new(entities.Item)
 
-	if err := r.db.First(item, itemID).Error; err != nil {
+	if err := r.db.Connect().First(item, itemID).Error; err != nil {
 		r.logger.Error("Failed to get item by id: %s", err.Error())
 		return nil, &_itemShopExceptions.ItemNotFound{}
 	}

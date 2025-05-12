@@ -49,3 +49,7 @@ func (s *ItemManagingServiceImpl) Editing(itemId uint64, itemEditingReq *_itemMa
 	}
 	return itemEntityResult.ToItemModel(), nil
 }
+
+func (s *ItemManagingServiceImpl) Archiving(itemId uint64) error {
+	return s.itemManagingRepository.Archiving(itemId)
+}
