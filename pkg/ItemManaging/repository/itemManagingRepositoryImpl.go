@@ -35,6 +35,7 @@ func (r *itemManagingRepositoryImpl) Creating(itemEntity *entities.Item) (*entit
 
 	return item, nil
 }
+
 func (r *itemManagingRepositoryImpl) Editing(itemId uint64, itemEditingReq *_itemManagingModel.ItemEditingReq) (uint64, error) {
 	if err := r.db.Connect().Model(&entities.Item{}).Where("id = ?", itemId).Updates(itemEditingReq).Error; err != nil {
 		r.logger.Error("Failed to create item:", err)
