@@ -1,6 +1,8 @@
 module github.com/bigstth/isekai-shop-api
 
-go 1.20
+go 1.23.0
+
+toolchain go1.23.6
 
 require (
 	github.com/go-playground/validator/v10 v10.23.0
@@ -10,9 +12,11 @@ require (
 )
 
 require (
+	github.com/avast/retry-go v3.0.0+incompatible // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
+	golang.org/x/oauth2 v0.30.0 // indirect
 )
 
 require (
