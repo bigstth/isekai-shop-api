@@ -20,5 +20,5 @@ func (s *echoServer) initOAuth2Router() {
 	router.GET("/admin/login", oauth2Controller.AdminLogin)
 	router.GET("/player/login/callback", oauth2Controller.PlayerLoginCallback)
 	router.GET("/admin/login/callback", oauth2Controller.AdminLoginCallback)
-	router.GET("logout", oauth2Controller.Logout)
+	router.DELETE("/logout", oauth2Controller.Logout)
 }
