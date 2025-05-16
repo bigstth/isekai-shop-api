@@ -5,7 +5,7 @@ import (
 	"github.com/bigstth/isekai-shop-api/entities"
 	"github.com/labstack/echo/v4"
 
-	_itemShopExceptions "github.com/bigstth/isekai-shop-api/pkg/itemShop/exceptions"
+	_itemShopExceptions "github.com/bigstth/isekai-shop-api/pkg/itemShop/exception"
 	"github.com/bigstth/isekai-shop-api/pkg/itemShop/model"
 )
 

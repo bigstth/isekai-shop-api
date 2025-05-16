@@ -55,6 +55,7 @@ func (s *echoServer) Start() {
 	s.app.Use(timeOutMiddleware)
 
 	s.app.GET("/V1/health", s.healthCheck)
+	s.initOAuth2Router()
 	s.initItemShopRouter()
 	s.initItemManagingRouter()
 

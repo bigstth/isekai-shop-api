@@ -4,7 +4,7 @@ import (
 	"github.com/bigstth/isekai-shop-api/databases"
 	"github.com/bigstth/isekai-shop-api/entities"
 	"github.com/bigstth/isekai-shop-api/pkg/custom"
-	_itemManagingException "github.com/bigstth/isekai-shop-api/pkg/itemManaging/exceptions"
+	_itemManagingException "github.com/bigstth/isekai-shop-api/pkg/itemManaging/exception"
 	_itemManagingModel "github.com/bigstth/isekai-shop-api/pkg/itemManaging/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
