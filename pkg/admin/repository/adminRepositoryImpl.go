@@ -36,7 +36,7 @@ func (r *adminRepositoryImpl) Creating(adminEntity *entities.Admin) (*entities.A
 
 func (r *adminRepositoryImpl) FindById(adminID string) (*entities.Admin, error) {
 	admin := new(entities.Admin)
-	if err := r.db.Connect().Table("players").Where("id = ?", adminID).First(admin).Error; err != nil {
+	if err := r.db.Connect().Table("admins").Where("id = ?", adminID).First(admin).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			r.logger.Warn("Admin not found, ID:", adminID)
 			return nil, &_adminException.AdminNotFound{AdminID: adminID}

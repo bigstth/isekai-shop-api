@@ -12,6 +12,10 @@ import (
 
 	"github.com/bigstth/isekai-shop-api/config"
 	"github.com/bigstth/isekai-shop-api/databases"
+	_adminRepository "github.com/bigstth/isekai-shop-api/pkg/admin/repository"
+	_oauth2Controller "github.com/bigstth/isekai-shop-api/pkg/oauth2/controller"
+	_oauth2Service "github.com/bigstth/isekai-shop-api/pkg/oauth2/service"
+	_playerRepository "github.com/bigstth/isekai-shop-api/pkg/player/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -54,10 +58,12 @@ func (s *echoServer) Start() {
 	s.app.Use(bodyLimitMiddleware)
 	s.app.Use(timeOutMiddleware)
 
+	authorizingMiddleware := s.getAuthorizingMiddleware()
+
 	s.app.GET("/V1/health", s.healthCheck)
 	s.initOAuth2Router()
 	s.initItemShopRouter()
-	s.initItemManagingRouter()
+	s.initItemManagingRouter(authorizingMiddleware)
 
 	quitCh := make(chan os.Signal, 1)
 	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)
@@ -107,4 +113,19 @@ func getCORSMiddleWare(allowOrigins []string) echo.MiddlewareFunc {
 
 func getBodyLimitMiddleWare(limit string) echo.MiddlewareFunc {
 	return middleware.BodyLimit(limit)
+}
+
+func (s *echoServer) getAuthorizingMiddleware() *authorizingMiddleware {
+
+	playerRepository := _playerRepository.NewPlayerRepositoryImpl(s.db, s.app.Logger)
+	adminRepository := _adminRepository.NewAdminRepositoryImpl(s.db, s.app.Logger)
+
+	oauth2Service := _oauth2Service.NewGoogleOAuth2Service(playerRepository, adminRepository)
+	oauth2Controller := _oauth2Controller.NewGoogleOAuth2Controller(oauth2Service, s.conf.OAuth2, s.app.Logger)
+
+	return &authorizingMiddleware{
+		oauth2Controller: oauth2Controller,
+		oauth2Config:     s.conf.OAuth2,
+		logger:           s.app.Logger,
+	}
 }
