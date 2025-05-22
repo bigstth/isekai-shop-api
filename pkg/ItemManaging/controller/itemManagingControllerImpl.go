@@ -7,6 +7,7 @@ import (
 	"github.com/bigstth/isekai-shop-api/pkg/custom"
 	_itemManagingModel "github.com/bigstth/isekai-shop-api/pkg/itemManaging/model"
 	_itemManagingService "github.com/bigstth/isekai-shop-api/pkg/itemManaging/service"
+	"github.com/bigstth/isekai-shop-api/pkg/validation"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,6 +20,11 @@ func NewItemManagingControllerImpl(itemManagingService _itemManagingService.Item
 }
 
 func (c *ItemManagingControllerImpl) Creating(ctx echo.Context) error {
+	adminID, err := validation.AdminIDGetting(ctx)
+	if err != nil {
+		return custom.Error(ctx, http.StatusBadRequest, err.Error())
+	}
+
 	itemCreatingRequest := new(_itemManagingModel.ItemCreatingReq)
 
 	customEchoRequest := custom.NewCustomEchoRequest(ctx)
@@ -26,6 +32,8 @@ func (c *ItemManagingControllerImpl) Creating(ctx echo.Context) error {
 	if err := customEchoRequest.Bind(itemCreatingRequest); err != nil {
 		return custom.Error(ctx, http.StatusBadRequest, err.Error())
 	}
+
+	itemCreatingRequest.AdminID = adminID
 
 	item, err := c.itemManagingService.Creating(itemCreatingRequest)
 
