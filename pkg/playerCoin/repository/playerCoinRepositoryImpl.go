@@ -19,7 +19,7 @@ func NewPlayerCoinRepositoryImpl(db databases.Database, logger echo.Logger) Play
 func (r *playerCoinRepositoryImpl) CoinAdding(playerCoinEntity *entities.PlayerCoin) (*entities.PlayerCoin, error) {
 	playerCoin := new(entities.PlayerCoin)
 	if err := r.db.Connect().Create(playerCoinEntity).Scan(playerCoin).Error; err != nil {
-		r.logger.Error("Failed to add player coin: %s", err.Error())
+		r.logger.Error("Failed to add coin: %s", err.Error())
 		return nil, &_playerCoinException.CoinAddingException{}
 	}
 	return playerCoin, nil
