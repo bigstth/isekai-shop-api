@@ -40,3 +40,14 @@ func (c *playerCoinControllerImpl) CoinAdding(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusCreated, playerCoin)
 }
+
+func (c *playerCoinControllerImpl) Showing(ctx echo.Context) error {
+	playerID, err := validation.PlayerIDGetting(ctx)
+	if err != nil {
+		return custom.Error(ctx, http.StatusBadRequest, err.Error())
+	}
+
+	playerCoinShowing := c.playerCoinService.Showing(playerID)
+
+	return ctx.JSON(http.StatusOK, playerCoinShowing)
+}

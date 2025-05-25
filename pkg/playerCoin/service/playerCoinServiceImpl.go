@@ -29,3 +29,17 @@ func (s *playerCoinServiceImpl) CoinAdding(coinAddingReq *_playerCoinModel.CoinA
 
 	return playerCoinEntityResult.ToPlayerCoinModel(), nil
 }
+
+func (s *playerCoinServiceImpl) Showing(playerId string) *_playerCoinModel.PlayerCoinShowing {
+	playerCoinShowing, err := s.playerCoinRepository.Showing(playerId)
+	if err != nil {
+		return &_playerCoinModel.PlayerCoinShowing{
+			PlayerID: playerId,
+			Coin:     0,
+		}
+	}
+
+	playerCoinShowing.PlayerID = playerId
+
+	return playerCoinShowing
+}
