@@ -8,5 +8,5 @@ type InventoryFillingException struct {
 }
 
 func (e *InventoryFillingException) Error() string {
-	return fmt.Sprintf("Failed to fill inventory for player %s with item %d", e.PlayerID, e.ItemID)
+	return fmt.Sprintf("Failed to fill inventory for player id: %s with item: %d", e.PlayerID, e.ItemID)
 }
